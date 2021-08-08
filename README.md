@@ -1,167 +1,82 @@
-# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Project 3: Web APIs & NLP
+# Problem Statement 
 
-### Description
-
-In week four we've learned about a few different classifiers. In week five we'll learn about webscraping, APIs, and Natural Language Processing (NLP). This project will put those skills to the test.
-
-For project 3, your goal is two-fold:
-1. Using [Pushshift's](https://github.com/pushshift/api) API, you'll collect posts from two subreddits of your choosing.
-2. You'll then use NLP to train a classifier on which subreddit a given post came from. This is a binary classification problem.
+To combat misinformation Reddit would like to label submissions of  news articles as either fake news or real new based on the text in the post. This would increase user trust on the site and ultimately profits. We will use r/theonion and r/nottheonion subreddits as proxies to test if it is possible to get accurate classifications before employing the system site wide. 
 
 
-#### About the API
+# The Data 
 
-Pushshift's API is fairly straightforward. For example, if I want the posts from [`/r/boardgames`](https://www.reddit.com/r/boardgames), all I have to do is use the following url: https://api.pushshift.io/reddit/search/submission?subreddit=boardgames
+- Gathered using PushShift Reddit API 
+- 18451 posts from August 2,2021 -  May 21, 2013 
+    - 8486 submissions from r/theonion  - 55%
+    - 9965 from r/nottheonion - 45% 
 
-To help you get started, we have a primer video on how to use the API: https://youtu.be/AcrjEWsMi_E
+- About 30 posts per month 
+- Our goal is to be able to label posts based on the text in the submission so we will be focusing on title of each post 
 
----
-
-### Requirements
-
-- Gather and prepare your data using the `requests` library.
-- **Create and compare at least two models**. These can be any classifier of your choosing: logistic regression, Naive Bayes, KNN, SVM, Random Forest Classifier, etc.
-  - **Bonus**: use a Naive Bayes classifier
-- A Jupyter Notebook with your analysis for a peer audience of data scientists.
-- An executive summary of your results.
-- A short presentation outlining your process and findings for a semi-technical audience.
-
-**Pro Tip:** You can find a good example executive summary [here](https://www.proposify.biz/blog/executive-summary).
-
----
-
-### Necessary Deliverables / Submission
-
-- Code and executive summary must be in a clearly commented Jupyter Notebook.
-- You must submit your slide deck.
-- Materials must be submitted by **11:59 PM PST on Friday, August 6th**.
-- Presentation must be ready by **9:15 AM PST on Friday, August 6th**.
-
----
-
-## Rubric
-Your instructors will evaluate your project (for the most part) using the following criteria.  You should make sure that you consider and/or follow most if not all of the considerations/recommendations outlined below **while** working through your project.
-
-For Project 3 the evaluation categories are as follows:<br>
-**The Data Science Process**
-- Problem Statement
-- Data Collection
-- Data Cleaning & EDA
-- Preprocessing & Modeling
-- Evaluation and Conceptual Understanding
-- Conclusion and Recommendations
-
-**Organization and Professionalism**
-- Organization
-- Visualizations
-- Python Syntax and Control Flow
-- Presentation
-
-**Scores will be out of 30 points based on the 10 categories in the rubric.** <br>
-*3 points per section*<br>
-
-| Score | Interpretation |
-| --- | --- |
-| **0** | *Project fails to meet the minimum requirements for this item.* |
-| **1** | *Project meets the minimum requirements for this item, but falls significantly short of portfolio-ready expectations.* |
-| **2** | *Project exceeds the minimum requirements for this item, but falls short of portfolio-ready expectations.* |
-| **3** | *Project meets or exceeds portfolio-ready expectations; demonstrates a thorough understanding of every outlined consideration.* |
+**READER WARNING**: The information gathered was done so without filtering for explicit or offensive material in an effort to model based on real world data since content on reddit is not censored by default. The data gathered has observations containing explicit or otherwise offensive text.  
 
 
-### The Data Science Process
+# Methodology
 
-**Problem Statement**
-- Is it clear what the goal of the project is?
-- What type of model will be developed?
-- How will success be evaluated?
-- Is the scope of the project appropriate?
-- Is it clear who cares about this or why this is important to investigate?
-- Does the student consider the audience and the primary and secondary stakeholders?
+## Data Cleaning 
+0. Combine data from both subreddits into one dataframe for further analysis 
+1. Drop duplicate entries obtained during the data gathering process
+2. Check for anomalies, such as posts by moderators, in each subreddit that do not fit the pattern of the other posts 
+3. Remove URLs from the title to avoid classifying posts based on the link instead of the text content 
+4. Remove posts without any text in the title as these will not provide any information for our purposes
+5. Consider other features of the data 
 
-**Data Collection**
-- Was enough data gathered to generate a significant result?
-- Was data collected that was useful and relevant to the project?
-- Was data collection and storage optimized through custom functions, pipelines, and/or automation?
-- Was thought given to the server receiving the requests such as considering number of requests per second?
-
-**Data Cleaning and EDA**
-- Are missing values imputed/handled appropriately?
-- Are distributions examined and described?
-- Are outliers identified and addressed?
-- Are appropriate summary statistics provided?
-- Are steps taken during data cleaning and EDA framed appropriately?
-- Does the student address whether or not they are likely to be able to answer their problem statement with the provided data given what they've discovered during EDA?
-
-**Preprocessing and Modeling**
-- Is text data successfully converted to a matrix representation?
-- Are methods such as stop words, stemming, and lemmatization explored?
-- Does the student properly split and/or sample the data for validation/training purposes?
-- Does the student test and evaluate a variety of models to identify a production algorithm (**AT MINIMUM:** two classification models, **BONUS:** try a Naive Bayes)?
-- Does the student defend their choice of production model relevant to the data at hand and the problem?
-- Does the student explain how the model works and evaluate its performance successes/downfalls?
-
-**Evaluation and Conceptual Understanding**
-- Does the student accurately identify and explain the baseline score?
-- Does the student select and use metrics relevant to the problem objective?
-- Does the student interpret the results of their model for purposes of inference?
-- Is domain knowledge demonstrated when interpreting results?
-- Does the student provide appropriate interpretation with regards to descriptive and inferential statistics?
-
-**Conclusion and Recommendations**
-- Does the student provide appropriate context to connect individual steps back to the overall project?
-- Is it clear how the final recommendations were reached?
-- Are the conclusions/recommendations clearly stated?
-- Does the conclusion answer the original problem statement?
-- Does the student address how findings of this research can be applied for the benefit of stakeholders?
-- Are future steps to move the project forward identified?
+## Modeling 
+1. Make a baseline, equivalent to guessing at random, for comparison to production models 
+2. Make multinomial naive bayes model with default hyperparamters 
+3. Adjust relevant hyperparameters to optimize for metrics of value 
+4. Make a decision tree model with default hyperparameters 
+5. Adjust relevant hyperparameters to optimize for metrics of value 
 
 
-### Organization and Professionalism
+# Conclusion and Recommendations
 
-**Project Organization**
-- Are modules imported correctly (using appropriate aliases)?
-- Are data imported/saved using relative paths?
-- Does the README provide a good executive summary of the project?
-- Is markdown formatting used appropriately to structure notebooks?
-- Are there an appropriate amount of comments to support the code?
-- Are files & directories organized correctly?
-- Are there unnecessary files included?
-- Do files and directories have well-structured, appropriate, consistent names?
-
-**Visualizations**
-- Are sufficient visualizations provided?
-- Do plots accurately demonstrate valid relationships?
-- Are plots labeled properly?
-- Are plots interpreted appropriately?
-- Are plots formatted and scaled appropriately for inclusion in a notebook-based technical report?
-
-**Python Syntax and Control Flow**
-- Is care taken to write human readable code?
-- Is the code syntactically correct (no runtime errors)?
-- Does the code generate desired results (logically correct)?
-- Does the code follows general best practices and style guidelines?
-- Are Pandas functions used appropriately?
-- Are `sklearn` and `NLTK` methods used appropriately?
-
-**Presentation**
-- Is the problem statement clearly presented?
-- Does a strong narrative run through the presentation building toward a final conclusion?
-- Are the conclusions/recommendations clearly stated?
-- Is the level of technicality appropriate for the intended audience?
-- Is the student substantially over or under time?
-- Does the student appropriately pace their presentation?
-- Does the student deliver their message with clarity and volume?
-- Are appropriate visualizations generated for the intended audience?
-- Are visualizations necessary and useful for supporting conclusions/explaining findings?
+For the production multinomial naive bayes model there was a 38% increase in accuracy compared to the baseline model of guessing at random. For the production decision tree model there was a 32% increase in accuracy compared to the baseline model of guessing at random. 
 
 
----
+The significant improvement from the baseline model in both the naive bayes and decision tree model suggests that it is possible to label submissions as “fake news” or “real news” based on the title.
 
-### Why did we choose this project for you?
-This project covers three of the biggest concepts we cover in the class: Classification Modeling, Natural Language Processing and Data Wrangling/Acquisition.
 
-Part 1 of the project focuses on **Data wrangling/gathering/acquisition**. This is a very important skill as not all the data you will need will be in clean CSVs or a single table in SQL.  There is a good chance that wherever you land you will have to gather some data from some unstructured/semi-structured sources; when possible, requesting information from an API, but often scraping it because they don't have an API (or it's terribly documented).
+It is recommended to train the classification model on more subreddits before deploying the feature across all of reddit to ensure it generalizes well. 
 
-Part 2 of the project focuses on **Natural Language Processing** and converting standard text data (like Titles and Comments) into a format that allows us to analyze it and use it in modeling.
+It is recommended to test other classification models like random forest to see if better accuracy can be achieved. 
 
-Part 3 of the project focuses on **Classification Modeling**.  Given that project 2 was a regression focused problem, we needed to give you a classification focused problem to practice the various models, means of assessment and preprocessing associated with classification.   
+Limitations of current model: 
+- Not a lot data cleaning was performed so it may be possible to get better features after cleaning the data further  
+- Basic transformer was used to vectorize text. By using a more complex transformer, such as TFIDF, that retains more of the context in the text it may be possible to get better results.  
+- The model was only trained on two subreddits so the models ability to generalize to other subreddits may be limited. 
+-  Only text from title of post was used for this model so it is likely that by adding other important features and metadata the model will perform better 
+
+
+# Sources 
+
+This study referenced the following sources: 
+
+1. https://www.niemanlab.org/2019/01/a-typical-big-news-story-in-2018-lasted-about-7-days-until-we-moved-on-to-the-next-crisis/
+
+2. https://github.com/pushshift/api 
+
+3. https://regex101.com/
+
+4. https://www.reddit.com/r/nottheonion/wiki/expanded
+
+5. https://www.reddit.com/r/TheOnion/ 
+
+6. https://stackoverflow.com/questions/11331982/how-to-remove-any-url-within-a-string-in-python  
+
+7. https://www.reddit.com/wiki/markdown 
+
+8. https://www.reddit.com/r/announcements/comments/7a4bjo/time_for_my_quarterly_inquisition_reddit_ceo_here/dp70sul/?context=2
+
+9. https://en.wikipedia.org/wiki/Naive_Bayes_classifier
+
+10. https://stackoverflow.com/questions/29867367/sklearn-multinomial-nb-most-informative-features
+
+11. https://scikit-learn.org/stable/modules/tree.html#minimal-cost-complexity-pruning
+
+12. https://stackoverflow.com/questions/11331982/how-to-remove-any-url-within-a-string-in-python
